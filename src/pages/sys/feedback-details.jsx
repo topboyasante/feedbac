@@ -118,7 +118,7 @@ function FeedbackDetails() {
         <h3>{container.name}</h3>
         <div className="flex gap-3 items-center">
           <CopyToClipboard
-            text={`http://localhost:5173/send-feedback/${containerId}`}
+            text={`https://feedbac-teal.vercel.app/send-feedback/${containerId}`}
             onCopy={handleCopy}
           >
             <Button size="sm" className="gap-2">
