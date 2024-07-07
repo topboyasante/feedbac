@@ -1,6 +1,7 @@
 import { useAuth } from "@/context/auth-context";
 import Logo from "../assets/logo.png";
 import Hero from "../assets/hero.png";
+import Dashboard from "../assets/dashboard.png";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 
@@ -63,8 +64,23 @@ function RootPage() {
           </div>
         </div>
       </div>
+      <div className="max-w-screen-lg mx-auto py-10">
+        <div>
+          <h3 className="text-primary">
+            Powerful Feedback Collection Made Easy
+          </h3>
+          <p className="text-neutral-500">
+            Our feedback collection system provides a seamless experience for
+            gathering insights from your customers, clients, or employees. With
+            real-time analytics, easy-to-use forms, and intuitive reporting, you
+            can make data-driven decisions to improve your business.
+          </p>
+          <br />
+          <img src={Dashboard} alt="hero" />
+        </div>
+      </div>
       <footer className="max-w-screen-lg mx-auto py-3 border-y">
-        <p className="text-center text-primary">Built by Kirk Mortey</p>
+        <p className="text-center text-primary">2024. All Rights Reserved.</p>
       </footer>
     </section>
   );

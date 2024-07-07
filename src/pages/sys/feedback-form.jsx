@@ -73,6 +73,7 @@ function FeedbackForm() {
       await addDoc(feedbacksCollectionRef, feedbackData);
 
       toast.success("Feedback created successfully!");
+      navigate("/");
       reset();
     } catch (error) {
       console.error("Error adding feedback:", error);
