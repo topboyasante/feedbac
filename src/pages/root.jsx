@@ -64,7 +64,7 @@ function RootPage() {
           </div>
         </div>
       </div>
-      <div className="max-w-screen-lg mx-auto py-10">
+      <div className="max-w-screen-lg mx-auto py-10 px-6">
         <div>
           <h3 className="text-primary">
             Powerful Feedback Collection Made Easy
