@@ -76,7 +76,7 @@ function RootPage() {
             can make data-driven decisions to improve your business.
           </p>
           <br />
-          <img src={Dashboard} alt="hero" />
+          <img src={Dashboard} alt="hero" className="border"/>
         </div>
       </div>
       <footer className="max-w-screen-lg mx-auto py-3 border-y">
