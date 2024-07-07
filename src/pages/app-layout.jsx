@@ -71,7 +71,10 @@ export default function AppLayout() {
                 </div>
               </div>
               <div className="flex justify-between items-center w-full sm:hidden">
-                SecureCourse
+                <div className="flex items-center gap-2 border-y p-3 h-14">
+                  <img src={Logo} alt="logo" className="w-8 h-8" />
+                  <p>Feedbac</p>
+                </div>
                 <div className="flex gap-3 items-center">
                   <div className="flex gap-3 items-center">
                     <div className="border rounded-full p-2 text-sm">
@@ -91,7 +94,10 @@ export default function AppLayout() {
                     </SheetTrigger>
                     <SheetContent side="left">
                       <nav className="grid gap-6 text-lg font-medium">
-                        <div className="w-[40px]">Feedbac</div>
+                        <div className="flex items-center gap-2">
+                          <img src={Logo} alt="logo" className="w-8 h-8" />
+                          <p>Feedbac</p>
+                        </div>
                         {NAVBAR_LINKS.map((link, index) => {
                           return (
                             <SheetTrigger asChild key={index}>
@@ -100,8 +106,8 @@ export default function AppLayout() {
                                 className={cn(
                                   "text-muted-foreground hover:text-foreground",
                                   {
-                                    "text-foreground":
-                                      route.pathname === `${link.href}`,
+                                    "border-l-[5px] border-l-primary bg-neutral-100 p-2 rounded-r-md text-black":
+                                      route.pathname.startsWith(`${link.href}`),
                                   }
                                 )}
                               >

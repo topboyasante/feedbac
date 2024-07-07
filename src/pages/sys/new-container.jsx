@@ -32,7 +32,6 @@ function NewFeedbackContainer() {
     resolver: zodResolver(formSchema),
   });
 
-
   const onSubmit = async (data) => {
     setIsSubmittingForm(true);
     setError("");
@@ -52,7 +51,6 @@ function NewFeedbackContainer() {
       reset("");
       navigate("/feedback");
     } catch (error) {
-      console.log(error);
       setError("Failed to create the feedback container. Please try again.");
     } finally {
       setIsSubmittingForm(false);

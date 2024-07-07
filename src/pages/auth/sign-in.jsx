@@ -40,7 +40,6 @@ function SignInForm() {
       await signInWithEmailAndPassword(auth, data.email, data.password);
       navigate("/dashboard");
     } catch (error) {
-      console.log(error);
       const friendlyMessage = normalizeFirebaseErrorMessage(error.code);
       setError(friendlyMessage);
     } finally {

@@ -3,6 +3,7 @@ import {
   collection,
   doc,
   getDoc,
+  getDocs,
   onSnapshot,
   query,
   where,
@@ -17,11 +18,13 @@ export const useFeedbackContainers = () =>
 
 export const FeedbackContainersProvider = ({ children }) => {
   const [feedbackContainers, setFeedbackContainers] = useState([]);
+  const [feedback, setFeedback] = useState([]);
   const [loading, setLoading] = useState(true);
   const { currentUser } = useAuth();
 
   useEffect(() => {
     let unsubscribe;
+    let isMounted = true; // Track if the component is mounted
 
     const fetchFeedbackContainers = async () => {
       try {
@@ -37,6 +40,7 @@ export const FeedbackContainersProvider = ({ children }) => {
         unsubscribe = onSnapshot(
           feedbackContainersQuery,
           (querySnapshot) => {
+            if (!isMounted) return; // Only update state if component is mounted
             const containers = [];
             querySnapshot.forEach((doc) => {
               containers.push({
@@ -48,12 +52,14 @@ export const FeedbackContainersProvider = ({ children }) => {
             setLoading(false);
           },
           (error) => {
+            if (!isMounted) return; // Only update state if component is mounted
             console.error("Error fetching feedback containers:", error);
             setFeedbackContainers([]);
             setLoading(false);
           }
         );
       } catch (error) {
+        if (!isMounted) return; // Only update state if component is mounted
         console.error("Error fetching feedback containers:", error);
         setFeedbackContainers([]);
         setLoading(false);
@@ -65,11 +71,12 @@ export const FeedbackContainersProvider = ({ children }) => {
     }
 
     return () => {
+      isMounted = false; // Set the flag to false when the component unmounts
       if (unsubscribe) {
         unsubscribe();
       }
     };
-  }, []);
+  }, [currentUser]);
 
   const fetchFeedbackContainerById = async (containerId) => {
     try {
@@ -91,9 +98,62 @@ export const FeedbackContainersProvider = ({ children }) => {
     }
   };
 
+  const fetchFeedbackByUserContainers = async () => {
+    try {
+      // Fetch all feedback related to the current user's containers
+      const feedbacksCollectionRef = collection(db, "feedback");
+      const feedbacksQuery = query(feedbacksCollectionRef);
+      const feedbacksSnapshot = await getDocs(feedbacksQuery);
+
+      // Get the IDs of all containers created by the current user
+      const userContainerIds = feedbackContainers.map(
+        (container) => container.id
+      );
+
+      // Filter feedback to include only those related to the current user's containers
+      const userFeedback = feedbacksSnapshot.docs
+        .map((doc) => ({ id: doc.id, ...doc.data() }))
+        .filter((feedback) => userContainerIds.includes(feedback.container));
+
+      return userFeedback;
+    } catch (error) {
+      console.error("Error fetching user feedback:", error);
+      throw error;
+    }
+  };
+
+  useEffect(() => {
+    let isMounted = true; // Track if the component is mounted
+
+    const fetchUserFeedback = async () => {
+      if (feedbackContainers.length > 0) {
+        try {
+          const userFeedback = await fetchFeedbackByUserContainers();
+          if (isMounted) {
+            setFeedback(userFeedback); // Only update state if component is mounted
+          }
+        } catch (error) {
+          console.error("Error fetching user feedback:", error);
+        }
+      }
+    };
+
+    fetchUserFeedback();
+
+    return () => {
+      isMounted = false; // Set the flag to false when the component unmounts
+    };
+  }, [feedbackContainers]);
+
   return (
     <FeedbackContainersContext.Provider
-      value={{ feedbackContainers, loading, fetchFeedbackContainerById }}
+      value={{
+        feedbackContainers,
+        feedback,
+        loading,
+        fetchFeedbackContainerById,
+        fetchFeedbackByUserContainers,
+      }}
     >
       {children}
     </FeedbackContainersContext.Provider>
